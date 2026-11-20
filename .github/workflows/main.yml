@@ -64,6 +64,6 @@ jobs:
           merge-multiple: true
       - name: Create Release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GHIDRA_PROSPERO_TOKEN }}
         run: gh release create 1.0${{ GITHUB.RUN_NUMBER }} ./*.zip --target ${{ GITHUB.SHA }} -t 1.0${{ GITHUB.RUN_NUMBER }}
 
