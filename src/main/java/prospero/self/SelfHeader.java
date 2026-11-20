@@ -98,9 +98,9 @@ public final class SelfHeader {
 
 	public ByteProvider getElfHeaderByteProvider() throws IOException {
 		BinaryReader reader = extendedHeader.getReader();
+		long end = Math.min(extendedHeader.getFileSize(), reader.getByteProvider().length());
 		return new ByteProviderWrapper(
-			reader.getByteProvider(), elfHeaderOffset,
-			extendedHeader.getFileSize() - elfHeaderOffset);
+			reader.getByteProvider(), elfHeaderOffset, end - elfHeaderOffset);
 	}
 
 	public ProsperoElfHeader buildElfHeader() throws IOException, ElfException {
