@@ -98,7 +98,7 @@ public class ProsperoSyscallsScript extends GhidraScript {
 		tester = ProsperoSyscallsScript::checkX64Instruction;
 		syscallRegister = "RAX";
 		datatypeArchiveName = "generic_clib_64";
-		syscallFileName = "orbis_syscall_numbers";
+		syscallFileName = "prospero_syscall_numbers";
 		overrideType = RefType.CALLOTHER_OVERRIDE_CALL;
 		callingConvention = "syscall";
 

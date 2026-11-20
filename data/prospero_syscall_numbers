@@ -159,6 +159,14 @@
 238 sys_ktimer_gettime
 239 sys_ktimer_getoverrun
 240 sys_nanosleep
+# 241: no exported caller
+241 sys_241
+# 242: no exported caller
+242 sys_242
+# 243: no exported caller
+243 sys_243
+# 247: no exported caller
+247 sys_247
 250 sys_minherit
 251 sys_rfork
 253 sys_issetugid
