@@ -105,7 +105,7 @@ public abstract class AbstractFileSystem<T extends FileInfoProvider> implements 
 		}
 	}
 
-	private void storeFile(T entry) {
+	private void storeFile(T entry) throws IOException {
 		int count = helper.getFileCount();
 		helper.storeFile(entry.getFileName(), count, false, entry.getSize(), entry);
 	}
