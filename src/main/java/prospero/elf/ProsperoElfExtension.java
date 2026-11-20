@@ -333,24 +333,38 @@ public class ProsperoElfExtension extends ElfExtension {
 		}
 	}
 
+	private static Address getParamAddress(ElfLoadHelper helper, Memory mem, String blockName,
+			ElfProgramHeaderType type) {
+		MemoryBlock block = mem.getBlock(blockName);
+		if (block != null) {
+			return block.getStart();
+		}
+		ElfProgramHeader[] phdrs = helper.getElfHeader().getProgramHeaders(type.value);
+		if (phdrs.length != 1) {
+			return null;
+		}
+		Address addr = helper.getDefaultAddress(phdrs[0].getVirtualAddress());
+		return mem.contains(addr) ? addr : null;
+	}
+
 	private void markupParamSection(ElfLoadHelper helper) throws Exception {
 		Program program = helper.getProgram();
 		Listing listing = program.getListing();
 		Memory mem = program.getMemory();
 		Structure struct = null;
-		MemoryBlock block = mem.getBlock(".sce_process_param");
-		if (block != null) {
+		Address start = getParamAddress(helper, mem, ".sce_process_param", PT_SCE_PROCPARAM);
+		if (start != null) {
 			struct = ProsperoDataUtils.procParamDataType;
 		} else {
-			block = mem.getBlock(".sce_module_param");
-			if (block != null) {
+			start = getParamAddress(helper, mem, ".sce_module_param", PT_SCE_MODULEPARAM);
+			if (start != null) {
 				struct = ProsperoDataUtils.moduleParamDataType;
 			}
 		}
 		if (struct == null) {
 			return;
 		}
-		Data data = listing.createData(block.getStart(), struct);
+		Data data = listing.createData(start, struct);
 		DataTypeComponent[] comps = struct.getComponents();
 		if (comps.length == 0) {
 			return;
