@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import ghidra.app.util.bin.ByteProvider;
+import ghidra.app.util.bin.ByteProviderWrapper;
 import ghidra.formats.gfilesystem.*;
 import ghidra.util.exception.CancelledException;
 import ghidra.util.task.TaskMonitor;
@@ -93,7 +94,8 @@ public abstract class AbstractFileSystem<T extends FileInfoProvider> implements 
 		if (entry == null) {
 			throw new IOException("Unknown file " + file);
 		}
-		return entry.getByteProvider();
+		ByteProvider bp = entry.getByteProvider();
+		return new ByteProviderWrapper(bp, 0, bp.length(), file.getFSRL());
 	}
 
 	@Override
