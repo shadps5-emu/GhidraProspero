@@ -1,6 +1,7 @@
 package orbis.elf;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import ghidra.app.plugin.exceptionhandlers.gcc.sections.EhFrameHeaderSection;
@@ -124,6 +125,17 @@ public class OrbisElfExtension extends ElfExtension {
 		0x6100003F, "SCE_SYMTABSZ", "", ElfDynamicValueType.VALUE);
 	public static final ElfDynamicType DT_SCE_HIOS = new ElfDynamicType(
 		0x6FFFF000, "SCE_HIOS", "", ElfDynamicValueType.VALUE);
+
+	public static final ElfDynamicType DT_SCE_ORIGINAL_FILENAME_1 = new ElfDynamicType(
+		0x61000041, "SCE_ORIGINAL_FILENAME_1", "", ElfDynamicValueType.STRING);
+	public static final ElfDynamicType DT_SCE_MODULE_INFO_1 = new ElfDynamicType(
+		0x61000043, "SCE_MODULE_INFO_1", "", ElfDynamicValueType.VALUE);
+	public static final ElfDynamicType DT_SCE_NEEDED_MODULE_1 = new ElfDynamicType(
+		0x61000045, "SCE_NEEDED_MODULE_1", "", ElfDynamicValueType.VALUE);
+	public static final ElfDynamicType DT_SCE_EXPORT_LIB_1 = new ElfDynamicType(
+		0x61000047, "SCE_EXPORT_LIB_1", "", ElfDynamicValueType.VALUE);
+	public static final ElfDynamicType DT_SCE_IMPORT_LIB_1 = new ElfDynamicType(
+		0x61000049, "SCE_IMPORT_LIB_1", "", ElfDynamicValueType.VALUE);
 
 	@Override
 	public boolean canHandle(ElfHeader elf) {
@@ -308,11 +320,13 @@ public class OrbisElfExtension extends ElfExtension {
 		ElfDynamicTable table = elf.getDynamicTable();
 		ElfStringTable stringTable = elf.getDynamicStringTable();
 		BinaryReader reader = elf.getReader();
-		for (ElfDynamic dynamic : table.getDynamics(DT_SCE_IMPORT_LIB)) {
+		List<ElfDynamic> imports = new ArrayList<>(List.of(table.getDynamics(DT_SCE_IMPORT_LIB)));
+		imports.addAll(List.of(table.getDynamics(DT_SCE_IMPORT_LIB_1)));
+		for (ElfDynamic dynamic : imports) {
 			monitor.checkCancelled();
 			long value = dynamic.getValue();
 			long offset =  value & 0xffffffffL;
-			long id = value >> 48;
+			long id = value >>> 48;
 			String libName = stringTable.readString(reader, offset) + PRX_LIB_EXTENSION;
 			Msg.info(this, "OrbisElfExtension: Registered Import Library. ID: " + id + " -> " + libName);
 			man.addLibrary(libName, id);

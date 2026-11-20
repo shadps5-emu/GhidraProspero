@@ -70,6 +70,10 @@ public class OrbisElfHeader extends ElfHeader {
 		}
 	}
 
+	public static boolean isPs5AbiVersion(byte abiVersion) {
+		return abiVersion == 2 || abiVersion == 3;
+	}
+
 	public boolean isKernel() {
 		return e_type() == ET_SCE_KERNEL;
 	}

@@ -334,17 +334,27 @@ public class OrbisElfProgramBuilder extends DefaultElfProgramBuilder {
 		if (phdr.getElfHeader().getSectionHeaderCount() != 0) {
 			return "segment_"+Integer.toString(i);
 		}
+		return getSegmentName(phdr, i);
+	}
+
+	public static String getSegmentName(ElfProgramHeader phdr, int i) {
 		switch(phdr.getType()) {
 			case ElfProgramHeaderConstants.PT_LOAD:
 				if (phdr.isExecute()) {
 					return ".text";
 				}
 				if (phdr.isWrite()) {
-					return ".data";
+					return isRelro(phdr) ? ".data.rel.ro" : ".data";
+				}
+				if (!phdr.isRead()) {
+					return SCE_DYNLIB_DATA_SECTION;
 				}
 				return ".rodata";
 			case PT_SCE_RELRO_VALUE:
+			case ElfProgramHeaderConstants.PT_GNU_RELRO:
 				return ".data.rel.ro";
+			case ElfProgramHeaderConstants.PT_NOTE:
+				return ".note";
 			case ElfProgramHeaderConstants.PT_DYNAMIC:
 				return ".dynamic";
 			case ElfProgramHeaderConstants.PT_TLS:
@@ -368,6 +378,18 @@ public class OrbisElfProgramBuilder extends DefaultElfProgramBuilder {
 			default:
 				return "segment_"+Integer.toString(i);
 		}
+	}
+
+	public static final String SCE_DYNLIB_DATA_SECTION = ".sce_dynlib_data";
+
+	private static boolean isRelro(ElfProgramHeader load) {
+		for (ElfProgramHeader phdr : load.getElfHeader()
+				.getProgramHeaders(ElfProgramHeaderConstants.PT_GNU_RELRO)) {
+			if (phdr.getVirtualAddress() == load.getVirtualAddress()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void processDynlibData() {

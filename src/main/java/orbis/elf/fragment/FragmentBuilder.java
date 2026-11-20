@@ -2,6 +2,8 @@ package orbis.elf.fragment;
 
 import ghidra.app.util.bin.format.elf.ElfLoadHelper;
 import ghidra.program.model.address.Address;
+import ghidra.program.model.address.AddressRange;
+import ghidra.program.model.address.AddressSet;
 import ghidra.program.model.listing.*;
 import ghidra.program.model.mem.Memory;
 import ghidra.program.model.mem.MemoryBlock;
@@ -71,7 +73,14 @@ public abstract class FragmentBuilder {
 		if (frag != null) {
 			return;
 		}
+		AddressSet range = new AddressSet(start, end.previous())
+				.intersect(program.getMemory().getLoadedAndInitializedAddressSet());
+		if (range.isEmpty()) {
+			return;
+		}
 		frag = root.createFragment(name);
-		frag.move(start, end);
+		for (AddressRange r : range) {
+			frag.move(r.getMinAddress(), r.getMaxAddress());
+		}
 	}
 }

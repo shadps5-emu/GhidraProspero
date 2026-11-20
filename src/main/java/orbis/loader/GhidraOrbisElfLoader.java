@@ -48,6 +48,9 @@ public class GhidraOrbisElfLoader extends ElfLoader {
 			case OrbisElfHeader.ET_SCE_STUBLIB:
 			case OrbisElfHeader.ET_SCE_DYNEXEC:
 			case OrbisElfHeader.ET_SCE_DYNAMIC:
+				if (!OrbisElfHeader.isPs5AbiVersion(header.e_ident_abiversion())) {
+					return loadSpecs;
+				}
 				break;
 			default:
 				return loadSpecs;

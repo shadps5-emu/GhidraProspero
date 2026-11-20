@@ -27,6 +27,9 @@ public final class SelfHeader {
 	private final long elfHeaderOffset;
 
 	public SelfHeader(ByteProvider provider) throws IOException, EncryptedSelfException {
+		if (isEncryptedPs5Self(provider)) {
+			throw new EncryptedSelfException();
+		}
 		BinaryReader reader = new BinaryReader(provider, true);
 		skipBytes(reader, MAGIC.length);
 		this.version = reader.readNextUnsignedByte();
@@ -41,9 +44,21 @@ public final class SelfHeader {
 		reader.setPointerIndex(reader.getPointerIndex() + n);
 	}
 
+	private static final byte[] PS5_ENCRYPTED_MAGIC = new byte[] {
+		(byte) 0x54, (byte) 0x14, (byte) 0xF5, (byte) 0xEE
+	};
+
 	public static boolean isSelf(ByteProvider provider) throws IOException {
+		if (provider.length() < MAGIC.length) {
+			return false;
+		}
 		byte[] magic = provider.readBytes(0, MAGIC.length);
-		return Arrays.equals(magic, MAGIC);
+		return Arrays.equals(magic, MAGIC) || Arrays.equals(magic, PS5_ENCRYPTED_MAGIC);
+	}
+
+	public static boolean isEncryptedPs5Self(ByteProvider provider) throws IOException {
+		return provider.length() >= PS5_ENCRYPTED_MAGIC.length &&
+			Arrays.equals(provider.readBytes(0, PS5_ENCRYPTED_MAGIC.length), PS5_ENCRYPTED_MAGIC);
 	}
 
 	/**
