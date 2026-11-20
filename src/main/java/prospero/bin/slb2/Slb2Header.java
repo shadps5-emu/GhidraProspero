@@ -11,7 +11,8 @@ import prospero.bin.FileSystemHeader;
 public final class Slb2Header extends Slb2Structure implements FileSystemHeader<Slb2Entry> {
 
 	static final String MAGIC = "SLB2";
-	private static final int MAX_ENTRIES = 10;
+	private static final int HEADER_SIZE = 0x20;
+	private static final int ENTRY_SIZE = 0x30;
 	public static final Structure dataType = getDataType();
 
 	private final long version;
@@ -27,7 +28,7 @@ public final class Slb2Header extends Slb2Structure implements FileSystemHeader<
 		this.version = reader.readNextUnsignedInt();
 		this.flags = reader.readNextUnsignedInt();
 		this.fileCount = reader.readNextUnsignedInt();
-		if (fileCount > MAX_ENTRIES) {
+		if (HEADER_SIZE + fileCount * ENTRY_SIZE > reader.length()) {
 			String count = Long.toString(fileCount);
 			throw new IOException("SLB2 Container has too many entries: " + count);
 		}
