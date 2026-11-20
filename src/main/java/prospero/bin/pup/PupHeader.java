@@ -1,19 +1,19 @@
 package prospero.bin.pup;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import ghidra.app.util.bin.BinaryReader;
 import ghidra.app.util.bin.ByteProvider;
-import ghidra.util.Msg;
 
 import prospero.bin.BinStructure;
 import prospero.bin.FileSystemHeader;
 
 final class PupHeader extends BinStructure implements FileSystemHeader<PupBlob> {
-
 	static final byte[] MAGIC = new byte[] {
-		(byte) 0x4F, (byte) 0x15, (byte) 0x3D, (byte) 0x1D
+		(byte) 0x54, (byte) 0x14, (byte) 0xF5, (byte) 0xEE
 	};
 
 	private final BinaryReader reader;
@@ -29,6 +29,7 @@ final class PupHeader extends BinStructure implements FileSystemHeader<PupBlob> 
 	private final int blobCount;
 	private final int flags2;
 	private final long blobStart;
+	private final List<PupBlob> files;
 
 	PupHeader(ByteProvider provider) throws IOException {
 		this.reader = new BinaryReader(provider, true);
@@ -44,14 +45,33 @@ final class PupHeader extends BinStructure implements FileSystemHeader<PupBlob> 
 		skipBytes(2);
 		this.headerSize = reader.readNextUnsignedShort();
 		this.metaSize = reader.readNextUnsignedShort();
-		this.fileSize = reader.readNextUnsignedInt();
-		// skip padding
-		skipBytes(4);
+		this.fileSize = reader.readNextLong();
 		this.blobCount = reader.readNextUnsignedShort();
 		this.flags2 = reader.readNextUnsignedShort();
 		// skip padding
 		skipBytes(4);
 		this.blobStart = reader.getPointerIndex();
+		this.files = readBlobs();
+	}
+
+	private List<PupBlob> readBlobs() throws IOException {
+		List<PupBlob> all = new ArrayList<>(blobCount);
+		reader.setPointerIndex(blobStart);
+		for (int i = 0; i < blobCount; i++) {
+			all.add(new PupBlob(reader, i));
+		}
+		List<PupBlob> result = new ArrayList<>();
+		for (PupBlob blob : all) {
+			if (!blob.isInfo()) {
+				result.add(blob);
+				continue;
+			}
+			long target = blob.getID();
+			if (target < all.size()) {
+				all.get((int) target).setInfo(blob);
+			}
+		}
+		return result;
 	}
 
 	private void skipBytes(int n) {
@@ -64,30 +84,7 @@ final class PupHeader extends BinStructure implements FileSystemHeader<PupBlob> 
 
 	@Override
 	public Iterator<PupBlob> iterator() {
-		reader.setPointerIndex(blobStart);
-		return new PupBlobIterator();
-	}
-
-	private class PupBlobIterator implements Iterator<PupBlob> {
-
-		private int index = 0;
-
-		@Override
-		public boolean hasNext() {
-			return index < blobCount;
-		}
-
-		@Override
-		public PupBlob next() {
-			index++;
-			try {
-				return new PupBlob(reader);
-			} catch (IOException e) {
-				Msg.error(this, e);
-			}
-			return null;
-		}
-
+		return files.iterator();
 	}
 
 	/**

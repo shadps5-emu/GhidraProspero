@@ -5,6 +5,8 @@ import java.io.IOException;
 import ghidra.app.util.bin.ByteProvider;
 import ghidra.formats.gfilesystem.*;
 import ghidra.formats.gfilesystem.annotations.FileSystemInfo;
+import ghidra.util.exception.CancelledException;
+import ghidra.util.task.TaskMonitor;
 
 import prospero.bin.AbstractFileSystem;
 import prospero.bin.FileSystemHeader;
@@ -19,6 +21,18 @@ public class PupFileSystem extends AbstractFileSystem<PupBlob> {
 	@Override
 	protected FileSystemHeader<PupBlob> getHeader() throws IOException {
 		return new PupHeader(getProvider());
+	}
+
+	@Override
+	public ByteProvider getByteProvider(GFile file, TaskMonitor monitor)
+			throws IOException, CancelledException {
+		PupBlob entry = getMetadata(file);
+		if (entry == null) {
+			throw new IOException("Unknown file " + file);
+		}
+		return FileSystemService.getInstance().getDerivedByteProvider(
+			getProvider().getFSRL(), file.getFSRL(), file.getName(), entry.getSize(),
+			entry::getInputStream, monitor);
 	}
 
 }

@@ -45,12 +45,23 @@ public final class SelfHeader {
 		(byte) 0x54, (byte) 0x14, (byte) 0xF5, (byte) 0xEE
 	};
 
+	private static final byte[] ELF_MAGIC = new byte[] { 0x7F, 'E', 'L', 'F' };
+	private static final int ENTRY_COUNT_OFFSET = 0x18;
+	private static final int HEADER_SIZE = 0x20;
+	private static final int ENTRY_SIZE = 0x20;
+
 	public static boolean isSelf(ByteProvider provider) throws IOException {
-		if (provider.length() < MAGIC.length) {
+		if (provider.length() < HEADER_SIZE) {
 			return false;
 		}
 		byte[] magic = provider.readBytes(0, MAGIC.length);
-		return Arrays.equals(magic, MAGIC) || Arrays.equals(magic, PS5_MAGIC);
+		if (!Arrays.equals(magic, MAGIC) && !Arrays.equals(magic, PS5_MAGIC)) {
+			return false;
+		}
+		byte[] count = provider.readBytes(ENTRY_COUNT_OFFSET, 2);
+		long elf = HEADER_SIZE + (long) ENTRY_SIZE * ((count[0] & 0xFF) | (count[1] & 0xFF) << 8);
+		return provider.length() >= elf + ELF_MAGIC.length &&
+			Arrays.equals(provider.readBytes(elf, ELF_MAGIC.length), ELF_MAGIC);
 	}
 
 	/**

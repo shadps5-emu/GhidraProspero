@@ -12,12 +12,12 @@ public class PupFileSystemFactory extends AbstractFileSystemFactory<PupFileSyste
 
 	@Override
 	public int getBytesRequired() {
-		return PupHeader.MAGIC.length;
+		return MAX_BYTESREQUIRED;
 	}
 
 	@Override
 	public boolean probeStartBytes(FSRL containerFSRL, byte[] startBytes) {
-		byte[] data = Arrays.copyOf(startBytes, getBytesRequired());
+		byte[] data = Arrays.copyOf(startBytes, PupHeader.MAGIC.length);
 		if (Arrays.equals(data, PupHeader.MAGIC)) {
 			try (ByteArrayProvider provider = new ByteArrayProvider(startBytes)) {
 				return !SelfHeader.isSelf(provider);

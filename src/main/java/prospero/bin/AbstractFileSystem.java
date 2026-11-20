@@ -36,6 +36,10 @@ public abstract class AbstractFileSystem<T extends FileInfoProvider> implements 
 		return provider;
 	}
 
+	protected final T getMetadata(GFile file) {
+		return helper.getMetadata(file);
+	}
+
 	@Override
 	public final void close() throws IOException {
 		boolean wasClosed = isClosed;
