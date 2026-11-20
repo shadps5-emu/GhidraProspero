@@ -1,459 +1,498 @@
 #format = number(decimal) syscall_name
 #define 0 SYS_syscall
-1 sys_exit
-2 sys_fork
-3 sys_read
-4 sys_write
-5 sys_open
-6 sys_close
-7 sys_wait4
-9 sys_link
-10 sys_unlink
-12 sys_chdir
-13 sys_fchdir
-14 sys_mknod
-15 sys_chmod
-16 sys_chown
-20 sys_getpid
-21 sys_mount
-22 sys_unmount
-23 sys_setuid
-24 sys_getuid
-25 sys_geteuid
-26 sys_ptrace
-27 sys_recvmsg
-28 sys_sendmsg
-29 sys_recvfrom
-30 sys_accept
-31 sys_getpeername
-32 sys_getsockname
-33 sys_access
-34 sys_chflags
-35 sys_fchflags
-36 sys_sync
-37 sys_kill
-39 sys_getppid
-41 sys_dup
-42 sys_pipe
-43 sys_getegid
-44 sys_profil
-45 sys_ktrace
-47 sys_getgid
-49 sys_getlogin
-50 sys_setlogin
-53 sys_sigaltstack
-54 sys_ioctl
-55 sys_reboot
-56 sys_revoke
-57 sys_symlink
-58 sys_readlink
-59 sys_execve
-60 sys_umask
-61 sys_chroot
-65 sys_netbsd_msync
-66 sys_vfork
-69 sys_sbrk
-70 sys_sstk
-73 sys_munmap
-74 sys_mprotect
-75 sys_madvise
-78 sys_mincore
-79 sys_getgroups
-80 sys_setgroups
-81 sys_getpgrp
-82 sys_setpgid
-83 sys_setitimer
-85 sys_swapon
-86 sys_getitimer
-89 sys_getdtablesize
-90 sys_dup2
-92 sys_fcntl
-93 sys_select
-95 sys_fsync
-96 sys_setpriority
-97 sys_socket
-98 sys_connect
-99 sys_netcontrol
-100 sys_getpriority
-101 sys_netabort
-102 sys_netgetsockinfo
-104 sys_bind
-105 sys_setsockopt
-106 sys_listen
-113 sys_socketex
-114 sys_socketclose
-116 sys_gettimeofday
-117 sys_getrusage
-118 sys_getsockopt
-120 sys_readv
-121 sys_writev
-122 sys_settimeofday
-123 sys_fchown
-124 sys_fchmod
-125 sys_netgetiflist
-126 sys_setreuid
-127 sys_setregid
-128 sys_rename
-131 sys_flock
-132 sys_mkfifo
-133 sys_sendto
-134 sys_shutdown
-135 sys_socketpair
-136 sys_mkdir
-137 sys_rmdir
-138 sys_utimes
-140 sys_adjtime
-141 sys_kqueueex
-147 sys_setsid
-154 sys_shmctl
-155 sys_nfssvc
-165 sys_sysarch
-166 sys_rtprio
-169 sys_shmctl
-170 sys_shmctl
-171 sys_shmctl
-181 sys_setgid
-182 sys_setegid
-183 sys_seteuid
-188 sys_stat
-189 sys_fstat
-190 sys_lstat
-191 sys_pathconf
-192 sys_fpathconf
-194 sys_getrlimit
-195 sys_setrlimit
-196 sys_getdirentries
-202 sys___sysctl
-203 sys_mlock
-204 sys_munlock
-206 sys_futimes
-207 sys_getpgid
-209 sys_poll
-210 sys_lkmnosys
-211 sys_lkmnosys
-212 sys_lkmnosys
-213 sys_lkmnosys
-214 sys_lkmnosys
-215 sys_lkmnosys
-216 sys_lkmnosys
-217 sys_lkmnosys
-218 sys_lkmnosys
-219 sys_lkmnosys
-220 sys_shmctl
-221 sys_shmctl
-222 sys_shmctl
-224 sys_shmctl
-225 sys_shmctl
-226 sys_shmctl
-227 sys_shmctl
-228 sys_shmctl
-229 sys_shmctl
-230 sys_shmctl
-231 sys_shmctl
-232 sys_clock_gettime
-233 sys_clock_settime
-234 sys_clock_getres
-235 sys_ktimer_create
-236 sys_ktimer_delete
-237 sys_ktimer_settime
-238 sys_ktimer_gettime
-239 sys_ktimer_getoverrun
-240 sys_nanosleep
-# 241: no exported caller
-241 sys_241
-# 242: no exported caller
-242 sys_242
-# 243: no exported caller
-243 sys_243
-# 247: no exported caller
-247 sys_247
-250 sys_minherit
-251 sys_rfork
-253 sys_issetugid
-254 sys_netbsd_lchown
-255 sys_aio_read
-256 sys_aio_write
-272 sys_getdents
-274 sys_lchmod
-275 sys_netbsd_lchown
-276 sys_lutimes
-277 sys_netbsd_msync
-289 sys_preadv
-290 sys_pwritev
-304 sys_kldload
-305 sys_kldunload
-306 sys_kldfind
-307 sys_kldnext
-308 sys_kldstat
-309 sys_kldfirstmod
-310 sys_getsid
-311 sys_setresuid
-312 sys_setresgid
-314 sys_aio_return
-315 sys_aio_suspend
-316 sys_aio_cancel
-317 sys_aio_error
-321 sys_yield
-324 sys_mlockall
-325 sys_munlockall
-326 sys___getcwd
-327 sys_sched_setparam
-328 sys_sched_getparam
-329 sys_sched_setscheduler
-330 sys_sched_getscheduler
-331 sys_sched_yield
-332 sys_sched_get_priority_max
-333 sys_sched_get_priority_min
-334 sys_sched_rr_get_interval
-335 sys_utrace
-337 sys_kldsym
-339 sys_shmctl
-340 sys_sigprocmask
-341 sys_sigsuspend
-343 sys_sigpending
-345 sys_sigtimedwait
-346 sys_sigwaitinfo
-359 sys_aio_waitcomplete
-360 sys_getresuid
-361 sys_getresgid
-362 sys_kqueue
-363 sys_kevent
-374 sys___setugid
-377 sys_shmctl
-378 sys_nmount
-379 sys_mtypeprotect
-384 sys___mac_get_proc
-385 sys___mac_set_proc
-386 sys___mac_get_fd
-387 sys___mac_get_file
-388 sys___mac_set_fd
-389 sys___mac_set_file
-390 sys_kenv
-391 sys_lchflags
-392 sys_uuidgen
-393 sys_sendfile
-394 sys_mac_syscall
-395 sys_getfsstat
-396 sys_statfs
-397 sys_fstatfs
-400 sys_ksem_close
-401 sys_ksem_post
-402 sys_ksem_wait
-403 sys_ksem_trywait
-404 sys_ksem_init
-405 sys_ksem_open
-406 sys_ksem_unlink
-407 sys_ksem_getvalue
-408 sys_ksem_destroy
-409 sys___mac_get_pid
-410 sys___mac_get_link
-411 sys___mac_set_link
-415 sys___mac_execve
-416 sys_sigaction
-417 sys_sigreturn
-421 sys_getcontext
-422 sys_setcontext
-423 sys_swapcontext
-429 sys_sigwait
-430 sys_thr_create
-431 sys_thr_exit
-432 sys_thr_self
-433 sys_thr_kill
-434 sys__umtx_lock
-435 sys__umtx_unlock
-441 sys_ksem_timedwait
-442 sys_thr_suspend
-443 sys_thr_wake
-444 sys_kldunloadf
-454 sys__umtx_op
-455 sys_thr_new
-456 sys_sigqueue
-457 sys_shmctl
-458 sys_shmctl
-459 sys_shmctl
-460 sys_shmctl
-461 sys_shmctl
-462 sys_shmctl
-464 sys_thr_set_name
-465 sys_aio_fsync
-466 sys_rtprio_thread
-475 sys_pread
-476 sys_pwrite
-477 sys_mmap
-478 sys_lseek
-479 sys_truncate
-480 sys_ftruncate
-481 sys_thr_kill2
-482 sys_shm_open
-483 sys_shm_unlink
-484 sys_cpuset
-485 sys_cpuset_setid
-486 sys_cpuset_getid
-487 sys_cpuset_getaffinity
-488 sys_cpuset_setaffinity
-490 sys_fchmodat
-491 sys_fchownat
-493 sys_fstatat
-494 sys_futimesat
-495 sys_linkat
-496 sys_mkdirat
-497 sys_mkfifoat
-498 sys_mknodat
-499 sys_openat
-501 sys_renameat
-502 sys_symlinkat
-503 sys_unlinkat
-505 sys_shmctl
-510 sys_shmctl
-511 sys_shmctl
-512 sys_shmctl
-514 sys_cap_new
-515 sys_cap_getrights
-516 sys_cap_enter
-517 sys_cap_getmode
-518 sys_pdfork
-519 sys_pdkill
-520 sys_pdgetpid
-522 sys_pselect
-525 sys_rctl_get_racct
-526 sys_rctl_get_rules
-527 sys_rctl_get_limits
-528 sys_rctl_add_rule
-529 sys_rctl_remove_rule
-532 sys_regmgr_call
-533 sys_jitshm_create
-534 sys_jitshm_alias
-535 sys_dl_get_list
-536 sys_dl_get_info
-538 sys_evf_create
-539 sys_evf_delete
-540 sys_evf_open
-541 sys_evf_close
-542 sys_evf_wait
-543 sys_evf_trywait
-544 sys_evf_set
-545 sys_evf_clear
-546 sys_evf_cancel
-547 sys_query_memory_protection
-548 sys_batch_map
-549 sys_osem_create
-550 sys_osem_delete
-551 sys_osem_open
-552 sys_osem_close
-553 sys_osem_wait
-554 sys_osem_trywait
-555 sys_osem_post
-556 sys_osem_cancel
-557 sys_namedobj_create
-558 sys_namedobj_delete
-559 sys_set_vm_container
-560 sys_debug_init
-561 sys_suspend_process
-562 sys_resume_process
-563 sys_opmc_enable
-564 sys_opmc_disable
-565 sys_opmc_set_ctl
-566 sys_opmc_set_ctr
-567 sys_opmc_get_ctr
-568 sys_budget_create
-569 sys_budget_delete
-570 sys_budget_get
-571 sys_budget_set
-572 sys_virtual_query
-573 sys_mdbg_call
-580 sys_eport_create
-581 sys_eport_delete
-582 sys_eport_trigger
-583 sys_eport_open
-584 sys_eport_close
-585 sys_is_in_sandbox
-586 sys_dmem_container
-587 sys_get_authinfo
-588 sys_mname
-589 sys_dynlib_dlopen
-590 sys_dynlib_dlclose
-591 sys_dynlib_dlsym
-592 sys_dynlib_get_list
-593 sys_dynlib_get_info
-594 sys_dynlib_load_prx
-595 sys_dynlib_unload_prx
-596 sys_dynlib_do_copy_relocations
-597 sys_dynlib_prepare_dlclose
-598 sys_dynlib_get_proc_param
-599 sys_dynlib_process_needed_and_relocate
-600 sys_sandbox_path
-601 sys_mdbg_service
-602 sys_randomized_path
-603 sys_rdup
-604 sys_dl_get_metadata
-605 sys_workaround8849
-606 sys_is_development_mode
-607 sys_get_self_auth_info
-608 sys_dynlib_get_info_ex
-609 sys_budget_getid
-610 sys_budget_get_ptype
-611 sys_get_paging_stats_of_all_threads
-612 sys_get_proc_type_info
-613 sys_get_resident_count
-614 sys_prepare_to_suspend_process
-615 sys_get_resident_fmem_count
-616 sys_thr_get_name
-617 sys_set_gpo
-618 sys_get_paging_stats_of_all_objects
-619 sys_test_debug_rwmem
-620 sys_free_stack
-621 sys_suspend_system
-622 sys_ipmimgr_call
-623 sys_get_gpo
-624 sys_get_vm_map_timestamp
-625 sys_opmc_set_hw
-626 sys_opmc_get_hw
-627 sys_get_cpu_usage_all
-628 sys_mmap_dmem
-629 sys_physhm_open
-630 sys_physhm_unlink
-631 sys_resume_internal_hdd
-632 sys_thr_suspend_ucontext
-633 sys_thr_resume_ucontext
-634 sys_thr_get_ucontext
-635 sys_thr_set_ucontext
-636 sys_set_timezone_info
-637 sys_set_phys_fmem_limit
-638 sys_utc_to_localtime
-639 sys_localtime_to_utc
-640 sys_set_uevt
-641 sys_get_cpu_usage_proc
-642 sys_get_map_statistics
-643 sys_set_chicken_switches
-646 sys_get_kernel_mem_statistics
-647 sys_get_sdk_compiled_version
-648 sys_app_state_change
-649 sys_dynlib_get_obj_member
-650 sys_budget_get_ptype_of_budget
-651 sys_prepare_to_resume_process
-652 sys_process_terminate
-653 sys_blockpool_open
-654 sys_blockpool_map
-655 sys_blockpool_unmap
-656 sys_dynlib_get_info_for_libdbg
-657 sys_blockpool_batch
-658 sys_fdatasync
-659 sys_dynlib_get_list2
-660 sys_dynlib_get_info2
-661 sys_aio_submit
-662 sys_aio_multi_delete
-663 sys_aio_multi_wait
-664 sys_aio_multi_poll
-665 sys_aio_get_data
-666 sys_aio_multi_cancel
-667 sys_get_bio_usage_all
-668 sys_aio_create
-669 sys_aio_submit_cmd
-670 sys_aio_init
-671 sys_get_page_table_stats
-672 sys_dynlib_get_list_for_libdbg
-673 sys_blockpool_move
-674 sys_virtual_query_all
-675 sys_reserve_2mb_page
-676 sys_cpumode_yield
-677 sys_get_phys_page_size
+1 sys_exit  # narg 1
+2 sys_fork  # narg 0
+3 sys_read  # narg 3
+4 sys_write  # narg 3
+5 sys_open  # narg 3
+6 sys_close  # narg 1
+7 sys_wait4  # narg 4
+9 sys_link  # narg 2
+10 sys_unlink  # narg 1
+12 sys_chdir  # narg 1
+13 sys_fchdir  # narg 1
+14 sys_mknod  # narg 3
+15 sys_chmod  # narg 2
+16 sys_chown  # narg 3
+20 sys_getpid  # narg 0
+21 sys_mount  # narg 4
+22 sys_unmount  # narg 2
+23 sys_setuid  # narg 1
+24 sys_getuid  # narg 0
+25 sys_geteuid  # narg 0
+26 sys_ptrace  # narg 4
+27 sys_recvmsg  # narg 3
+28 sys_sendmsg  # narg 3
+29 sys_recvfrom  # narg 6
+30 sys_accept  # narg 3
+31 sys_getpeername  # narg 3
+32 sys_getsockname  # narg 3
+33 sys_access  # narg 2
+34 sys_chflags  # narg 2
+35 sys_fchflags  # narg 2
+36 sys_sync  # narg 0
+37 sys_kill  # narg 2
+39 sys_getppid  # narg 0
+41 sys_dup  # narg 1
+42 sys_pipe  # narg 0
+43 sys_getegid  # narg 0
+44 sys_profil  # narg 4
+45 sys_ktrace  # narg 4
+47 sys_getgid  # narg 0
+49 sys_getlogin  # narg 2
+50 sys_setlogin  # narg 1
+53 sys_sigaltstack  # narg 2
+54 sys_ioctl  # narg 3
+55 sys_reboot  # narg 1
+56 sys_revoke  # narg 1
+57 sys_symlink  # narg 2
+58 sys_readlink  # narg 3
+59 sys_execve  # narg 3
+60 sys_umask  # narg 1
+61 sys_chroot  # narg 1
+65 sys_netbsd_msync  # narg 3
+66 sys_vfork  # narg 0
+69 sys_sbrk  # narg 1
+70 sys_sstk  # narg 1
+73 sys_munmap  # narg 2
+74 sys_mprotect  # narg 3
+75 sys_madvise  # narg 3
+78 sys_mincore  # narg 3
+79 sys_getgroups  # narg 2
+80 sys_setgroups  # narg 2
+81 sys_getpgrp  # narg 0
+82 sys_setpgid  # narg 2
+83 sys_setitimer  # narg 3
+85 sys_swapon  # narg 1
+86 sys_getitimer  # narg 2
+89 sys_getdtablesize  # narg 0
+90 sys_dup2  # narg 2
+92 sys_fcntl  # narg 3
+93 sys_select  # narg 5
+95 sys_fsync  # narg 1
+96 sys_setpriority  # narg 3
+97 sys_socket  # narg 3
+98 sys_connect  # narg 3
+99 sys_netcontrol  # narg 4
+100 sys_getpriority  # narg 2
+101 sys_netabort  # narg 2
+102 sys_netgetsockinfo  # narg 4
+104 sys_bind  # narg 3
+105 sys_setsockopt  # narg 5
+106 sys_listen  # narg 2
+113 sys_socketex  # narg 5
+114 sys_socketclose  # narg 1
+116 sys_gettimeofday  # narg 2
+117 sys_getrusage  # narg 2
+118 sys_getsockopt  # narg 5
+120 sys_readv  # narg 3
+121 sys_writev  # narg 3
+122 sys_settimeofday  # narg 2
+123 sys_fchown  # narg 3
+124 sys_fchmod  # narg 2
+125 sys_netgetiflist  # narg 3
+126 sys_setreuid  # narg 2
+127 sys_setregid  # narg 2
+128 sys_rename  # narg 2
+131 sys_flock  # narg 2
+132 sys_mkfifo  # narg 2
+133 sys_sendto  # narg 6
+134 sys_shutdown  # narg 2
+135 sys_socketpair  # narg 4
+136 sys_mkdir  # narg 2
+137 sys_rmdir  # narg 1
+138 sys_utimes  # narg 2
+140 sys_adjtime  # narg 2
+141 sys_kqueueex  # narg 1
+147 sys_setsid  # narg 0
+154 sys_shmctl  # narg 4
+155 sys_nfssvc  # narg 2
+165 sys_sysarch  # narg 2
+166 sys_rtprio  # narg 3
+169 sys_shmctl  # narg 5
+170 sys_shmctl  # narg 6
+171 sys_shmctl  # narg 4
+181 sys_setgid  # narg 1
+182 sys_setegid  # narg 1
+183 sys_seteuid  # narg 1
+188 sys_stat  # narg 2
+189 sys_fstat  # narg 2
+190 sys_lstat  # narg 2
+191 sys_pathconf  # narg 2
+192 sys_fpathconf  # narg 2
+194 sys_getrlimit  # narg 2
+195 sys_setrlimit  # narg 2
+196 sys_getdirentries  # narg 4
+202 sys___sysctl  # narg 6
+203 sys_mlock  # narg 2
+204 sys_munlock  # narg 2
+206 sys_futimes  # narg 2
+207 sys_getpgid  # narg 1
+209 sys_poll  # narg 3
+210 sys_lkmnosys  # narg 1
+211 sys_lkmnosys  # narg 1
+212 sys_lkmnosys  # narg 1
+213 sys_lkmnosys  # narg 1
+214 sys_lkmnosys  # narg 1
+215 sys_lkmnosys  # narg 1
+216 sys_lkmnosys  # narg 1
+217 sys_lkmnosys  # narg 1
+218 sys_lkmnosys  # narg 1
+219 sys_lkmnosys  # narg 1
+220 sys_shmctl  # narg 0
+221 sys_shmctl  # narg 3
+222 sys_shmctl  # narg 3
+224 sys_shmctl  # narg 0
+225 sys_shmctl  # narg 2
+226 sys_shmctl  # narg 4
+227 sys_shmctl  # narg 5
+228 sys_shmctl  # narg 3
+229 sys_shmctl  # narg 0
+230 sys_shmctl  # narg 1
+231 sys_shmctl  # narg 3
+232 sys_clock_gettime  # narg 2
+233 sys_clock_settime  # narg 2
+234 sys_clock_getres  # narg 2
+235 sys_ktimer_create  # narg 3
+236 sys_ktimer_delete  # narg 1
+237 sys_ktimer_settime  # narg 4
+238 sys_ktimer_gettime  # narg 2
+239 sys_ktimer_getoverrun  # narg 1
+240 sys_nanosleep  # narg 2
+241 sys_241  # narg 1
+242 sys_242  # narg 1
+243 sys_243  # narg 1
+247 sys_247  # narg 3
+250 sys_minherit  # narg 3
+251 sys_rfork  # narg 1
+253 sys_issetugid  # narg 0
+254 sys_netbsd_lchown  # narg 3
+255 sys_aio_read  # narg 1
+256 sys_aio_write  # narg 1
+272 sys_getdents  # narg 3
+274 sys_lchmod  # narg 2
+275 sys_netbsd_lchown  # narg 3
+276 sys_lutimes  # narg 2
+277 sys_netbsd_msync  # narg 3
+289 sys_preadv  # narg 4
+290 sys_pwritev  # narg 4
+304 sys_kldload  # narg 1
+305 sys_kldunload  # narg 1
+306 sys_kldfind  # narg 1
+307 sys_kldnext  # narg 1
+308 sys_kldstat  # narg 2
+309 sys_kldfirstmod  # narg 1
+310 sys_getsid  # narg 1
+311 sys_setresuid  # narg 3
+312 sys_setresgid  # narg 3
+314 sys_aio_return  # narg 1
+315 sys_aio_suspend  # narg 3
+316 sys_aio_cancel  # narg 2
+317 sys_aio_error  # narg 1
+321 sys_yield  # narg 0
+324 sys_mlockall  # narg 1
+325 sys_munlockall  # narg 0
+326 sys___getcwd  # narg 2
+327 sys_sched_setparam  # narg 2
+328 sys_sched_getparam  # narg 2
+329 sys_sched_setscheduler  # narg 3
+330 sys_sched_getscheduler  # narg 1
+331 sys_sched_yield  # narg 0
+332 sys_sched_get_priority_max  # narg 1
+333 sys_sched_get_priority_min  # narg 1
+334 sys_sched_rr_get_interval  # narg 2
+335 sys_utrace  # narg 2
+337 sys_kldsym  # narg 3
+339 sys_shmctl  # narg 5
+340 sys_sigprocmask  # narg 3
+341 sys_sigsuspend  # narg 1
+343 sys_sigpending  # narg 1
+345 sys_sigtimedwait  # narg 3
+346 sys_sigwaitinfo  # narg 2
+359 sys_aio_waitcomplete  # narg 2
+360 sys_getresuid  # narg 3
+361 sys_getresgid  # narg 3
+362 sys_kqueue  # narg 0
+363 sys_kevent  # narg 6
+374 sys___setugid  # narg 1
+377 sys_shmctl  # narg 7
+378 sys_nmount  # narg 3
+379 sys_mtypeprotect  # narg 4
+384 sys___mac_get_proc  # narg 1
+385 sys___mac_set_proc  # narg 1
+386 sys___mac_get_fd  # narg 2
+387 sys___mac_get_file  # narg 2
+388 sys___mac_set_fd  # narg 2
+389 sys___mac_set_file  # narg 2
+390 sys_kenv  # narg 4
+391 sys_lchflags  # narg 2
+392 sys_uuidgen  # narg 2
+393 sys_sendfile  # narg 7
+394 sys_mac_syscall  # narg 3
+395 sys_getfsstat  # narg 3
+396 sys_statfs  # narg 2
+397 sys_fstatfs  # narg 2
+400 sys_ksem_close  # narg 1
+401 sys_ksem_post  # narg 1
+402 sys_ksem_wait  # narg 1
+403 sys_ksem_trywait  # narg 1
+404 sys_ksem_init  # narg 2
+405 sys_ksem_open  # narg 5
+406 sys_ksem_unlink  # narg 1
+407 sys_ksem_getvalue  # narg 2
+408 sys_ksem_destroy  # narg 1
+409 sys___mac_get_pid  # narg 2
+410 sys___mac_get_link  # narg 2
+411 sys___mac_set_link  # narg 2
+415 sys___mac_execve  # narg 4
+416 sys_sigaction  # narg 3
+417 sys_sigreturn  # narg 1
+421 sys_getcontext  # narg 1
+422 sys_setcontext  # narg 1
+423 sys_swapcontext  # narg 2
+429 sys_sigwait  # narg 2
+430 sys_thr_create  # narg 3
+431 sys_thr_exit  # narg 1
+432 sys_thr_self  # narg 1
+433 sys_thr_kill  # narg 2
+441 sys_ksem_timedwait  # narg 2
+442 sys_thr_suspend  # narg 1
+443 sys_thr_wake  # narg 1
+444 sys_kldunloadf  # narg 2
+454 sys__umtx_op  # narg 5
+455 sys_thr_new  # narg 2
+456 sys_sigqueue  # narg 3
+457 sys_shmctl  # narg 4
+458 sys_shmctl  # narg 3
+459 sys_shmctl  # narg 5
+460 sys_shmctl  # narg 5
+461 sys_shmctl  # narg 2
+462 sys_shmctl  # narg 1
+464 sys_thr_set_name  # narg 2
+465 sys_aio_fsync  # narg 2
+466 sys_rtprio_thread  # narg 3
+475 sys_pread  # narg 4
+476 sys_pwrite  # narg 4
+477 sys_mmap  # narg 6
+478 sys_lseek  # narg 3
+479 sys_truncate  # narg 2
+480 sys_ftruncate  # narg 2
+481 sys_thr_kill2  # narg 3
+482 sys_shm_open  # narg 3
+483 sys_shm_unlink  # narg 1
+484 sys_cpuset  # narg 1
+485 sys_cpuset_setid  # narg 3
+486 sys_cpuset_getid  # narg 4
+487 sys_cpuset_getaffinity  # narg 5
+488 sys_cpuset_setaffinity  # narg 5
+490 sys_fchmodat  # narg 4
+491 sys_fchownat  # narg 5
+493 sys_fstatat  # narg 4
+494 sys_futimesat  # narg 3
+495 sys_linkat  # narg 5
+496 sys_mkdirat  # narg 3
+497 sys_mkfifoat  # narg 3
+498 sys_mknodat  # narg 4
+499 sys_openat  # narg 4
+501 sys_renameat  # narg 4
+502 sys_symlinkat  # narg 3
+503 sys_unlinkat  # narg 3
+505 sys_shmctl  # narg 1
+510 sys_shmctl  # narg 4
+511 sys_shmctl  # narg 3
+512 sys_shmctl  # narg 3
+515 sys_cap_getrights  # narg 3
+516 sys_cap_enter  # narg 0
+517 sys_cap_getmode  # narg 1
+519 sys_pdkill  # narg 2
+520 sys_pdgetpid  # narg 2
+522 sys_pselect  # narg 6
+525 sys_rctl_get_racct  # narg 4
+526 sys_rctl_get_rules  # narg 4
+527 sys_rctl_get_limits  # narg 4
+528 sys_rctl_add_rule  # narg 4
+529 sys_rctl_remove_rule  # narg 4
+532 sys_regmgr_call  # narg 5
+533 sys_jitshm_create  # narg 3
+534 sys_jitshm_alias  # narg 2
+535 sys_dl_get_list  # narg 4
+536 sys_dl_get_info  # narg 3
+538 sys_evf_create  # narg 3
+539 sys_evf_delete  # narg 1
+540 sys_evf_open  # narg 1
+541 sys_evf_close  # narg 1
+542 sys_evf_wait  # narg 5
+543 sys_evf_trywait  # narg 4
+544 sys_evf_set  # narg 2
+545 sys_evf_clear  # narg 2
+546 sys_evf_cancel  # narg 3
+547 sys_query_memory_protection  # narg 2
+548 sys_batch_map  # narg 5
+549 sys_osem_create  # narg 4
+550 sys_osem_delete  # narg 1
+551 sys_osem_open  # narg 1
+552 sys_osem_close  # narg 1
+553 sys_osem_wait  # narg 3
+554 sys_osem_trywait  # narg 2
+555 sys_osem_post  # narg 2
+556 sys_osem_cancel  # narg 3
+557 sys_namedobj_create  # narg 3
+558 sys_namedobj_delete  # narg 2
+559 sys_set_vm_container  # narg 1
+560 sys_debug_init  # narg 1
+561 sys_suspend_process  # narg 1
+562 sys_resume_process  # narg 1
+563 sys_opmc_enable  # narg 1
+564 sys_opmc_disable  # narg 1
+565 sys_opmc_set_ctl  # narg 3
+566 sys_opmc_set_ctr  # narg 3
+567 sys_opmc_get_ctr  # narg 3
+568 sys_budget_create  # narg 5
+569 sys_budget_delete  # narg 1
+570 sys_budget_get  # narg 3
+571 sys_budget_set  # narg 1
+572 sys_virtual_query  # narg 4
+573 sys_mdbg_call  # narg 3
+585 sys_is_in_sandbox  # narg 0
+586 sys_dmem_container  # narg 1
+587 sys_get_authinfo  # narg 2
+588 sys_mname  # narg 3
+589 sys_dynlib_dlopen  # narg 6
+590 sys_dynlib_dlclose  # narg 1
+591 sys_dynlib_dlsym  # narg 3
+592 sys_dynlib_get_list  # narg 3
+593 sys_dynlib_get_info  # narg 2
+594 sys_dynlib_load_prx  # narg 4
+595 sys_dynlib_unload_prx  # narg 3
+596 sys_dynlib_do_copy_relocations  # narg 0
+597 sys_dynlib_prepare_dlclose  # narg 3
+598 sys_dynlib_get_proc_param  # narg 2
+599 sys_dynlib_process_needed_and_relocate  # narg 0
+600 sys_sandbox_path  # narg 1
+601 sys_mdbg_service  # narg 3
+602 sys_randomized_path  # narg 3
+603 sys_rdup  # narg 2
+604 sys_dl_get_metadata  # narg 5
+605 sys_workaround8849  # narg 1
+606 sys_is_development_mode  # narg 0
+607 sys_get_self_auth_info  # narg 2
+608 sys_dynlib_get_info_ex  # narg 3
+609 sys_budget_getid  # narg 0
+610 sys_budget_get_ptype  # narg 1
+611 sys_get_paging_stats_of_all_threads  # narg 3
+612 sys_get_proc_type_info  # narg 1
+613 sys_get_resident_count  # narg 3
+614 sys_prepare_to_suspend_process  # narg 1
+615 sys_get_resident_fmem_count  # narg 3
+616 sys_thr_get_name  # narg 2
+617 sys_set_gpo  # narg 1
+618 sys_get_paging_stats_of_all_objects  # narg 3
+619 sys_test_debug_rwmem  # narg 5
+620 sys_free_stack  # narg 0
+621 sys_suspend_system  # narg 1
+622 sys_ipmimgr_call  # narg 6
+623 sys_get_gpo  # narg 1
+624 sys_get_vm_map_timestamp  # narg 0
+625 sys_opmc_set_hw  # narg 4
+626 sys_opmc_get_hw  # narg 5
+627 sys_get_cpu_usage_all  # narg 2
+628 sys_mmap_dmem  # narg 6
+629 sys_physhm_open  # narg 4
+630 sys_physhm_unlink  # narg 1
+631 sys_resume_internal_hdd  # narg 0
+632 sys_thr_suspend_ucontext  # narg 1
+633 sys_thr_resume_ucontext  # narg 1
+634 sys_thr_get_ucontext  # narg 2
+635 sys_thr_set_ucontext  # narg 2
+636 sys_set_timezone_info  # narg 2
+637 sys_set_phys_fmem_limit  # narg 2
+638 sys_utc_to_localtime  # narg 4
+639 sys_localtime_to_utc  # narg 5
+640 sys_set_uevt  # narg 8
+641 sys_get_cpu_usage_proc  # narg 2
+642 sys_get_map_statistics  # narg 4
+643 sys_set_chicken_switches  # narg 1
+646 sys_get_kernel_mem_statistics  # narg 1
+647 sys_get_sdk_compiled_version  # narg 1
+648 sys_app_state_change  # narg 1
+649 sys_dynlib_get_obj_member  # narg 3
+650 sys_budget_get_ptype_of_budget  # narg 1
+651 sys_prepare_to_resume_process  # narg 1
+652 sys_process_terminate  # narg 2
+653 sys_blockpool_open  # narg 1
+654 sys_blockpool_map  # narg 5
+655 sys_blockpool_unmap  # narg 3
+656 sys_dynlib_get_info_for_libdbg  # narg 2
+657 sys_blockpool_batch  # narg 4
+658 sys_fdatasync  # narg 1
+659 sys_dynlib_get_list2  # narg 3
+660 sys_dynlib_get_info2  # narg 2
+661 sys_aio_submit  # narg 4
+662 sys_aio_multi_delete  # narg 3
+663 sys_aio_multi_wait  # narg 5
+664 sys_aio_multi_poll  # narg 3
+665 sys_aio_get_data  # narg 2
+666 sys_aio_multi_cancel  # narg 3
+667 sys_get_bio_usage_all  # narg 2
+668 sys_aio_create  # narg 2
+669 sys_aio_submit_cmd  # narg 5
+670 sys_aio_init  # narg 4
+671 sys_get_page_table_stats  # narg 4
+672 sys_dynlib_get_list_for_libdbg  # narg 3
+673 sys_blockpool_move  # narg 4
+674 sys_virtual_query_all  # narg 5
+675 sys_reserve_2mb_page  # narg 2
+676 sys_cpumode_yield  # narg 0
+677 sys_get_phys_page_size  # narg 6
+678 sys_678  # narg 2
+679 sys_679  # narg 3
+680 sys_680  # narg 3
+681 sys_681  # narg 2
+682 sys_682  # narg 2
+683 sys_683  # narg 4
+684 sys_684  # narg 4
+685 sys_685  # narg 4
+686 sys_686  # narg 4
+687 sys_687  # narg 2
+688 sys_688  # narg 1
+689 sys_689  # narg 4
+690 sys_690  # narg 4
+691 sys_691  # narg 2
+692 sys_692  # narg 4
+693 sys_693  # narg 3
+694 sys_694  # narg 3
+700 sys_700  # narg 6
+701 sys_701  # narg 8
+702 sys_702  # narg 3
+703 sys_703  # narg 2
+704 sys_704  # narg 5
+705 sys_705  # narg 2
+706 sys_706  # narg 1
+707 sys_707  # narg 1
+708 sys_708  # narg 5
+709 sys_709  # narg 4
+710 sys_710  # narg 2
+711 sys_711  # narg 3
+712 sys_712  # narg 1
+713 sys_713  # narg 1
+714 sys_714  # narg 2
+715 sys_715  # narg 3
+716 sys_openintr  # narg 3
+717 sys_dl_get_info_2  # narg 4
+718 sys_718  # narg 3
+719 sys_719  # narg 2
+720 sys_720  # narg 3
+721 sys_721  # narg 5
+722 sys_722  # narg 5
+723 sys_723  # narg 3
+724 sys_724  # narg 7
+725 sys_725  # narg 7
+726 sys_726  # narg 4
+727 sys_727  # narg 5
+728 sys_728  # narg 5
+729 sys_729  # narg 3
+730 sys_730  # narg 2
+731 sys_731  # narg 3
+732 sys_732  # narg 5
+733 sys_733  # narg 4
+734 sys_734  # narg 3

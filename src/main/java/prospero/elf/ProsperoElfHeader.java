@@ -211,6 +211,10 @@ public class ProsperoElfHeader extends ElfHeader {
 		// GOT/PLT relocations are applied late.
 
 		ElfDynamicTable dynamicTable = getDynamicTable();
+		if (dynamicTable == null) {
+			// a static executable (the PS5 hypervisor) has no dynamic table
+			return;
+		}
 		if (!dynamicTable.containsDynamicValue(DT_SCE_RELA)) {
 			invoke("parseRelocationTables");
 			return;
