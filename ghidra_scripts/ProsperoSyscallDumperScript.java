@@ -1,0 +1,72 @@
+//Dumps the syscall table to an output file for use in ProsperoSyscallsScript
+//@category Prospero
+import java.io.File;
+import java.io.FileWriter;
+import java.util.List;
+
+import ghidra.app.script.GhidraScript;
+import ghidra.program.model.address.Address;
+import ghidra.program.model.data.*;
+import ghidra.program.model.listing.Data;
+import ghidra.program.model.listing.Function;
+import ghidra.program.model.symbol.Symbol;
+
+import prospero.data.SyscallDataType;
+import prospero.kernel.syscall.Syscall;
+import prospero.util.ProsperoUtil;
+
+public final class ProsperoSyscallDumperScript extends GhidraScript {
+
+	@Override
+	public void run() throws Exception {
+		if (!ProsperoUtil.isProsperoKernel(currentProgram)) {
+			popup("This script is intended for the Prospero (PS5) kernel");
+			return;
+		}
+		List<Symbol> symbols = getSymbols("sv_table", null);
+		if (symbols.size() != 1) {
+			popup("Only expected 1 sv_table to be defined");
+			return;
+		}
+		Symbol table = symbols.get(0);
+		Data data = getDataAt(table.getAddress());
+		if (!isTableCorrectlyDefined(data)) {
+			popup("sv_table is not properly defined");
+			return;
+		}
+
+		File file = askFile("Select output file", "ok");
+		try (FileWriter writer = new FileWriter(file)) {
+			monitor.initialize(data.getNumComponents());
+			monitor.setMessage("Dumping sv_table");
+			Function dummy = getFunction(data.getComponent(0));
+			for (int i = 1; i < data.getNumComponents(); i++) {
+				monitor.checkCancelled();
+				Function syscall = getFunction(data.getComponent(i));
+				if (syscall != null && !syscall.equals(dummy)) {
+					writer.write(String.format("%d %s\n", i, syscall.getName()));
+				}
+				monitor.incrementProgress(1);
+			}
+		}
+	}
+
+	private boolean isTableCorrectlyDefined(Data data) {
+		if (data == null || !data.isArray()) {
+			return false;
+		}
+		DataType dt = ((Array) data.getDataType()).getDataType();
+		DataTypeManager dtm = currentProgram.getDataTypeManager();
+		DataType syscallDt =
+			dtm.resolve(SyscallDataType.dataType, DataTypeConflictHandler.KEEP_HANDLER);
+		if (!dt.isEquivalent(syscallDt)) {
+			return false;
+		}
+		return true;
+	}
+
+	private Function getFunction(Data data) {
+		return getFunctionAt((Address) data.getComponent(Syscall.FUNCTION_ORDINAL).getValue());
+	}
+
+}
