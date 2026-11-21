@@ -36,6 +36,7 @@ final class ExfatHeader extends BinStructure implements FileSystemHeader<ExfatEn
 	private static final long LAST_CLUSTER = 0xFFFFFFF6L;
 
 	private final BinaryReader reader;
+	private final long imageLength;
 	private final long fatOffset;
 	private final long heapOffset;
 	private final long clusterCount;
@@ -45,6 +46,8 @@ final class ExfatHeader extends BinStructure implements FileSystemHeader<ExfatEn
 
 	ExfatHeader(ByteProvider provider) throws IOException {
 		this.reader = new BinaryReader(provider, true);
+		// read once here: ByteProvider.length() throws IOException before Ghidra 12.2
+		this.imageLength = provider.length();
 		if (!isExfat(reader.readByteArray(0, BOOT_SIGNATURE_OFFSET + 2))) {
 			throw new IOException("Not an exFAT volume");
 		}
@@ -184,8 +187,8 @@ final class ExfatHeader extends BinStructure implements FileSystemHeader<ExfatEn
 				readDirectory(data, full, seen);
 			}
 			else {
-				files.add(new ExfatEntry(reader.getByteProvider(), full.substring(1), attributes,
-					r.readUnsignedInt(pos + 8), r.readUnsignedInt(pos + 12),
+				files.add(new ExfatEntry(reader.getByteProvider(), imageLength, full.substring(1),
+					attributes, r.readUnsignedInt(pos + 8), r.readUnsignedInt(pos + 12),
 					r.readUnsignedInt(pos + 16), r.readUnsignedByte(pos + 20),
 					r.readUnsignedByte(pos + 21), r.readByte(pos + 22), r.readByte(pos + 23),
 					r.readByte(pos + 24), length, validLength, data));

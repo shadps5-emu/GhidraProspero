@@ -17,6 +17,7 @@ final class ExfatEntry implements FileInfoProvider {
 	private static final int ATTR_ARCHIVE = 0x20;
 
 	private final ByteProvider provider;
+	private final long imageLength;
 	private final String path;
 	private final int attributes;
 	private final Date created;
@@ -26,10 +27,11 @@ final class ExfatEntry implements FileInfoProvider {
 	private final long validLength;
 	private final long[] runs;
 
-	ExfatEntry(ByteProvider provider, String path, int attributes, long created,
+	ExfatEntry(ByteProvider provider, long imageLength, String path, int attributes, long created,
 			long modified, long accessed, int created10ms, int modified10ms, byte createdUtc,
 			byte modifiedUtc, byte accessedUtc, long length, long validLength, long[] runs) {
 		this.provider = provider;
+		this.imageLength = imageLength;
 		this.path = path;
 		this.attributes = attributes;
 		this.created = toDate(created, created10ms, createdUtc);
@@ -111,15 +113,11 @@ final class ExfatEntry implements FileInfoProvider {
 	/** The file is one run in the image, all of it written, and the image holds it all. */
 	boolean isContiguous() {
 		return runs.length == 2 && validLength == length &&
-			runs[0] + runs[1] <= providerLength();
+			runs[0] + runs[1] <= imageLength;
 	}
 
 	long getStart() {
 		return runs.length == 0 ? 0 : runs[0];
-	}
-
-	private long providerLength() {
-		return provider.length();
 	}
 
 	@Override
@@ -128,7 +126,7 @@ final class ExfatEntry implements FileInfoProvider {
 		long left = validLength;
 		for (int i = 0; i < runs.length && left > 0; i += 2) {
 			long n = Math.min(runs[i + 1], left);
-			if (runs[i] + n > providerLength()) {
+			if (runs[i] + n > imageLength) {
 				throw new IOException(path + " lies past the end of the exFAT image");
 			}
 			parts.add(new ByteProviderWrapper(provider, runs[i], n).getInputStream(0));
