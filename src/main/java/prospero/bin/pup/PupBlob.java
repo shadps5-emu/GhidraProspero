@@ -11,7 +11,10 @@ import prospero.bin.FileInfoProvider;
 
 final class PupBlob implements FileInfoProvider {
 
+	// entry flags, as psdevwiki gives them for the PS4 PUP
 	private static final long INFO_MASK = 0x1;
+	private static final long ENCRYPTED_MASK = 0x2;
+	private static final long SIGNED_MASK = 0x4;
 	private static final long COMPRESSED_MASK = 0x8;
 	private static final long BLOCKED_MASK = 0x800;
 	private static final int DIGEST_SIZE = 32;
@@ -49,6 +52,36 @@ final class PupBlob implements FileInfoProvider {
 
 	long getFileSize() {
 		return fileSize;
+	}
+
+	long getFlags() {
+		return flags;
+	}
+
+	boolean hasBlockTable() {
+		return info != null;
+	}
+
+	PupBlob getBlockTable() {
+		return info;
+	}
+
+	/** The flag bits that are set, by name. */
+	String getFlagNames() {
+		List<String> names = new ArrayList<>();
+		if ((flags & ENCRYPTED_MASK) != 0) {
+			names.add("encrypted");
+		}
+		if ((flags & SIGNED_MASK) != 0) {
+			names.add("signed");
+		}
+		if (isCompressed()) {
+			names.add("compressed");
+		}
+		if (isBlocked()) {
+			names.add(String.format("blocked (0x%x bytes per block)", getBlockSize()));
+		}
+		return names.isEmpty() ? "none" : String.join(", ", names);
 	}
 
 	@Override
