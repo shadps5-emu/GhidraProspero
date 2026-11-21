@@ -1,6 +1,8 @@
 package prospero.analysis;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import ghidra.app.services.AbstractAnalyzer;
@@ -11,6 +13,7 @@ import ghidra.program.model.address.AddressSetView;
 import ghidra.program.model.listing.*;
 import ghidra.program.model.symbol.*;
 import ghidra.util.exception.CancelledException;
+import ghidra.util.exception.DuplicateNameException;
 import ghidra.util.exception.InvalidInputException;
 import ghidra.util.Msg;
 import ghidra.util.task.TaskMonitor;
@@ -40,14 +43,27 @@ public class NIDAnalyzer extends AbstractAnalyzer {
 		try {
 			NIDResolver resolver = new NIDResolver(program, log);
 			SymbolTable table = program.getSymbolTable();
-			monitor.initialize(table.getNumSymbols());
 			monitor.setMessage("Resolving NIDs");
+			List<Symbol> primary = new ArrayList<>();
+			List<Symbol> secondary = new ArrayList<>();
 			for (Symbol s : table.getAllSymbols(false)) {
-				// remaining symbols are data but the library namespace
-				// cannot be added for some reason
 				monitor.checkCancelled();
-				if (s.isPrimary() && s.getName().contains("#")) {
-					resolver.resolve(s);
+				if (s.getName().contains("#")) {
+					(s.isPrimary() ? primary : secondary).add(s);
+				}
+			}
+			primary.addAll(secondary);
+			monitor.initialize(primary.size());
+			for (Symbol s : primary) {
+				monitor.checkCancelled();
+				if (!s.isDeleted()) {
+					try {
+						resolver.resolve(s);
+					} catch (Exception e) {
+						// one symbol failing must not stop the rest
+						Msg.error(this, "NIDAnalyzer: failed to resolve " + s.getName(), e);
+						log.appendException(e);
+					}
 				}
 				monitor.incrementProgress(1);
 			}
@@ -87,7 +103,8 @@ public class NIDAnalyzer extends AbstractAnalyzer {
 		void resolve(Symbol s) throws Exception {
 			Namespace ns = s.getParentNamespace();
 			String name = s.getName();
-			if (name.length() < 11 || name.charAt(11) != '#') {
+			// NID#L or NID#L#M; a symbol listed earlier may already be renamed
+			if (name.length() < 13 || name.charAt(11) != '#') {
 				return;
 			}
 			int i = getIndex(name.charAt(12));
@@ -115,9 +132,8 @@ public class NIDAnalyzer extends AbstractAnalyzer {
 				ns = s.getProgram().getGlobalNamespace();
 			}
 			try {
-				s.setNameAndNamespace(name, ns, SourceType.IMPORTED);
-				if (name.equals("__stack_chk_fail")) {
-					Function fun = (Function) s.getObject();
+				if (rename(s, name, ns) && name.equals("__stack_chk_fail") &&
+					s.getObject() instanceof Function fun) {
 					fun.setNoReturn(true);
 				}
 			} catch (InvalidInputException e) {
@@ -126,11 +142,26 @@ public class NIDAnalyzer extends AbstractAnalyzer {
 				if (loc == null) {
 					man.addExtLocation(ns, name, null, SourceType.IMPORTED);
 				}
-				s = table.createLabel(s.getAddress(), name, SourceType.IMPORTED);
-				s.setPrimary();
+				rename(s, name, s.getProgram().getGlobalNamespace());
 			} catch (Exception e) {
 				log.appendException(e);
 			}
+		}
+
+		/**
+		 * Renames s, or deletes it when another symbol with that name is already
+		 * at its address in that namespace (two NIDs naming the same thing).
+		 * Returns false if it was deleted.
+		 */
+		private boolean rename(Symbol s, String name, Namespace ns)
+				throws DuplicateNameException, InvalidInputException, CircularDependencyException {
+			Symbol same = table.getSymbol(name, s.getAddress(), ns);
+			if (same != null && !same.equals(s)) {
+				s.delete();
+				return false;
+			}
+			s.setNameAndNamespace(name, ns, SourceType.IMPORTED);
+			return true;
 		}
 
 		private Library getExternalLibrary(int index) throws Exception {
