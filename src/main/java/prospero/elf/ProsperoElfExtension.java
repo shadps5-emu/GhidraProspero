@@ -401,83 +401,104 @@ public class ProsperoElfExtension extends ElfExtension {
 		ProsperoElfHeader elf = (ProsperoElfHeader) helper.getElfHeader();
 		Program program = helper.getProgram();
 		ElfProgramHeader[] phdrs = elf.getProgramHeaders(ElfProgramHeaderConstants.PT_GNU_EH_FRAME);
-		if (phdrs != null && phdrs.length == 1) {
-			try {
-				Address addr = helper.getDefaultAddress(phdrs[0].getVirtualAddress());
-				Msg.info(this, "ProsperoElfExtension: fixing eh_frame_hdr at address " + addr);
-				Memory mem = program.getMemory();
-				MemoryBlock block = mem.getBlock(addr);
-				if (block != null) {
-					if (addr.compareTo(block.getStart()) > 0 && addr.compareTo(block.getEnd()) < 0) {
-						mem.split(block, addr);
-						block = mem.getBlock(addr);
-					}
-					block.setName(EH_FRAME_HDR);
-					Listing listing = program.getListing();
-					ProgramModule root = listing.getDefaultRootModule();
-					if (root != null) {
-						ProgramFragment fragment = null;
-						for (String treeName : listing.getTreeNames()) {
-							fragment = listing.getFragment(treeName, EH_FRAME_HDR);
-							if (fragment != null) {
-								break;
-							}
-						}
-						if (fragment == null) {
-							try {
-								fragment = root.createFragment(EH_FRAME_HDR);
-							} catch (Exception e) {
-								Msg.warn(this, "ProsperoElfExtension: failed to create fragment " + EH_FRAME_HDR + ": " + e.getMessage());
-							}
-						}
-						if (fragment != null) {
-							fragment.move(block.getStart(), block.getEnd());
-						}
-					}
-					
-					EhFrameHeaderSection section = new EhFrameHeaderSection(program);
-					section.analyze(monitor);
-					
-					Data data = listing.getDataAfter(addr);
-					if (data != null) {
-						Reference[] refs = data.getReferencesFrom();
-						if (refs != null && refs.length == 1) {
-							addr = refs[0].getToAddress();
-							Msg.info(this, "ProsperoElfExtension: fixing eh_frame referenced from eh_frame_hdr at address " + addr);
-							block = mem.getBlock(addr);
-							if (block != null) {
-								if (addr.compareTo(block.getStart()) > 0 && addr.compareTo(block.getEnd()) < 0) {
-									mem.split(block, addr);
-									block = mem.getBlock(addr);
-								}
-								block.setName(EH_FRAME);
-								if (root != null) {
-									ProgramFragment fragment = null;
-									for (String treeName : listing.getTreeNames()) {
-										fragment = listing.getFragment(treeName, EH_FRAME);
-										if (fragment != null) {
-											break;
-										}
-									}
-									if (fragment == null) {
-										try {
-											fragment = root.createFragment(EH_FRAME);
-										} catch (Exception e) {
-											Msg.warn(this, "ProsperoElfExtension: failed to create fragment " + EH_FRAME + ": " + e.getMessage());
-										}
-									}
-									if (fragment != null) {
-										fragment.move(block.getStart(), block.getEnd());
-									}
-								}
-							}
-						}
-					}
-				}
-			} catch (Exception e) {
-				Msg.error(this, "ProsperoElfExtension: error in fixEhFrame", e);
-				helper.log(e);
+		if (phdrs == null || phdrs.length != 1) {
+			return;
+		}
+		try {
+			Memory mem = program.getMemory();
+			Listing listing = program.getListing();
+			Address hdr = helper.getDefaultAddress(phdrs[0].getVirtualAddress());
+			MemoryBlock block = isolate(mem, hdr, phdrs[0].getFileSize(), EH_FRAME_HDR);
+			if (block == null) {
+				return;
 			}
+			moveToFragment(listing, EH_FRAME_HDR, block);
+
+			EhFrameHeaderSection section = new EhFrameHeaderSection(program);
+			section.analyze(monitor);
+
+			Data data = listing.getDataAfter(hdr);
+			if (data == null) {
+				return;
+			}
+			Reference[] refs = data.getReferencesFrom();
+			if (refs == null || refs.length != 1) {
+				return;
+			}
+			Address frame = refs[0].getToAddress();
+			MemoryBlock frameBlock = mem.getBlock(frame);
+			if (frameBlock == null) {
+				return;
+			}
+			long size = ehFrameSize(mem, frame, frameBlock.getEnd());
+			frameBlock = isolate(mem, frame, size, EH_FRAME);
+			moveToFragment(listing, EH_FRAME, frameBlock);
+		} catch (Exception e) {
+			Msg.error(this, "ProsperoElfExtension: error in fixEhFrame", e);
+			helper.log(e);
+		}
+	}
+
+	private static MemoryBlock isolate(Memory mem, Address start, long size, String name)
+			throws Exception {
+		MemoryBlock block = mem.getBlock(start);
+		if (block == null) {
+			return null;
+		}
+		String outer = block.getName();
+		if (start.compareTo(block.getStart()) > 0) {
+			mem.split(block, start);
+			block = mem.getBlock(start);
+		}
+		if (size > 0 && size < block.getSize()) {
+			Address end = start.add(size);
+			mem.split(block, end);
+			mem.getBlock(end).setName(outer);
+		}
+		block = mem.getBlock(start);
+		block.setName(name);
+		return block;
+	}
+
+	private static long ehFrameSize(Memory mem, Address start, Address limit) throws Exception {
+		long max = limit.subtract(start) + 1;
+		long off = 0;
+		while (off + 4 <= max) {
+			long length = mem.getInt(start.add(off)) & 0xffffffffL;
+			if (length == 0) {
+				return off + 4;
+			}
+			if (length == 0xffffffffL) {
+				if (off + 12 > max) {
+					break;
+				}
+				off += 12 + mem.getLong(start.add(off + 4));
+			} else {
+				off += 4 + length;
+			}
+		}
+		return Math.min(off, max);
+	}
+
+	private void moveToFragment(Listing listing, String name, MemoryBlock block) {
+		ProgramModule root = listing.getDefaultRootModule();
+		if (root == null || block == null) {
+			return;
+		}
+		ProgramFragment fragment = null;
+		for (String treeName : listing.getTreeNames()) {
+			fragment = listing.getFragment(treeName, name);
+			if (fragment != null) {
+				break;
+			}
+		}
+		try {
+			if (fragment == null) {
+				fragment = root.createFragment(name);
+			}
+			fragment.move(block.getStart(), block.getEnd());
+		} catch (Exception e) {
+			Msg.warn(this, "ProsperoElfExtension: failed to move fragment " + name + ": " + e.getMessage());
 		}
 	}
 
